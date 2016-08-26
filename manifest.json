@@ -1,0 +1,22 @@
+{
+	"manifest_version": 2,
+	
+	"name": "Getting started example",
+	"description": "////",
+	"version": "1.0",
+	
+	"browser_action": {
+		"default_icon": "images/Logo_v01_2.png",
+		"default_popup": "popup.html",
+		"default_title": "Click here!"
+	},
+	"background": {
+		"scripts": ["background.js"]
+	},
+	"content_scripts": [
+		{
+			"matches": ["http://www.youtube.com/*", "https://www.youtube.com/*"],
+			"js": ["content_script.js", "jquery-3.1.0.min.js"]
+		}
+	]
+}
