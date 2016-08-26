@@ -25,9 +25,6 @@ addButton.addEventListener("click", function(){
     var id = youtubeLinkParsing(window.location.href);
     chrome.runtime.sendMessage(id);
     alert("Added "+ document.title +" to queue.");
-    playerWin = window.open();
-    playerWin.document.body.innerHTML = queue_player.html;
-
 });
 
 var headlineTitle = document.getElementById("watch8-secondary-actions");
