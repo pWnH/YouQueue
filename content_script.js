@@ -1,9 +1,9 @@
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function () { 
     if (Notification.permission !== "granted")
-        Notification.requestPermission();s
+        Notification.requestPermission();
 });
 
-var youtubeLinkParsing = function(url){
+var youtubeLinkParsing = function(url){ // gets the id of the video
     var regExp = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
     var match = url.match(regExp);
     if (match && match[2].length == 11) {
@@ -13,7 +13,7 @@ var youtubeLinkParsing = function(url){
     }
 }
 
-function notifyMe(text) {
+function notifyMe(text) { //Notification with dynamic text
   if (!Notification) {
     alert('Desktop notifications not available in your browser. Try Chromium.'); 
     return;
@@ -33,24 +33,26 @@ function notifyMe(text) {
   }
 }
 
+//Add to queue button variables
 var addButton;
+var btnImage;
 
-function createAddButton(){
+function createAddButton(){ //creates the add to queue button + image
     addButton = document.createElement("BUTTON");
     addButton.setAttribute("class", "yt-uix-button yt-uix-button-size-default yt-uix-button-opacity yt-uix-button-has-icon no-icon-markup pause-resume-autoplay yt-uix-tooltip");
     addButton.setAttribute("title", "Add to queue");
 
-    var image = document.createElement("img");
-    image.setAttribute("src", "http://i.imgur.com/xzr5pVP.png");
-    image.align = "right";
-    image.height = "32";
-    image.width = "28";
+    btnImage = document.createElement("img");
+    btnImage.setAttribute("src", "http://i.imgur.com/xzr5pVP.png");
+    btnImage.align = "right";
+    btnImage.height = "32";
+    btnImage.width = "28";
 
-    addButton.appendChild(image);
+    addButton.appendChild(btnImage);
 }
 
-function setAddButton(){
-    createAddButton();
+function setAddButton(){ //adds the button to the current youtube page 
+    createAddButton();   //+ adds event listener + notification
     var headlineTitle = document.getElementById("watch8-secondary-actions");
     headlineTitle.appendChild(addButton);
 
@@ -64,8 +66,8 @@ function setAddButton(){
 
         var notifyText = "Added "+ videoTitle +" to queue.";
         notifyMe(notifyText);
-        image.setAttribute("src", "http://i.imgur.com/Ptyp4I6.png");
-        addButton.disabled=true;
+        btnImage.setAttribute("src", "http://i.imgur.com/Ptyp4I6.png");
+        addButton.disabled=true; //"prevents" duplicate added videos
     });
 }
 

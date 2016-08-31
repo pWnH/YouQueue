@@ -1,5 +1,5 @@
-var queue = [];
+var queue = []; //array to store video elements
 
 chrome.runtime.onMessage.addListener(function(response, sender, sendResponse){
-    var count  = queue.push(response);
+    queue.push(response); //adds the video element (see content_script.js => ln 65)
 });
