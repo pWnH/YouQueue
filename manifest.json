@@ -1,8 +1,8 @@
 {
 	"manifest_version": 2,
 	
-	"name": "Getting started example",
-	"description": "////",
+	"name": "YouQueue",
+	"description": "Queue youtube videos",
 	"version": "1.0",
 	
 	"browser_action": {
@@ -10,13 +10,16 @@
 		"default_popup": "popup.html",
 		"default_title": "Click here!"
 	},
+	"content_security_policy": "script-src 'self' https://www.youtube.com/iframe_api https://s.ytimg.com/yts/jsbin/www-widgetapi-vfldKI4RW.js https://s.ytimg.com/yts/jsbin/www-widgetapi-vflgGL-5Q.js; object-src 'self'",
+
 	"background": {
 		"scripts": ["background.js"]
 	},
 	"content_scripts": [
 		{
 			"matches": ["http://www.youtube.com/*", "https://www.youtube.com/*"],
-			"js": ["content_script.js", "jquery-3.1.0.min.js"]
+			"js": ["content_script.js", "jquery-3.1.0.min.js", "player.js"]
 		}
-	]
+	],
+	"web_accessible_resources":["player.js"]
 }

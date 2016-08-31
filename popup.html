@@ -6,11 +6,13 @@
  -->
 <html>
   <head>
-    <title>Getting Started Extension's Popup</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
+    <title>YouQueue Popup</title>
     <style>
       body {
         font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
         font-size: 100%;
+        background-color: white;
       }
       #status {
         /* avoid an excessively wide status text */
@@ -18,6 +20,14 @@
         text-overflow: ellipsis;
         overflow: hidden;
         max-width: 400px;
+      }
+      .pure-button {
+        background: #c42100;
+        color: white;
+      }
+      #queue-text-p {
+        text-align: center;
+        border: 2px solid #c42100;
       }
     </style>
 
@@ -27,9 +37,13 @@
       -
       - [1]: https://developer.chrome.com/extensions/contentSecurityPolicy
      -->
-    <script src="popup.js"></script>
+    
   </head>
   <body>
-      <button onClick="openPlayer()">Open player</button>
+      <div id="queue-text">
+        <h4>Videos in queue:</h4>
+      </div>
+      <button class="pure-button" id="playerBtn">Open player</button>
+      <script src="popup.js"></script>
   </body>
 </html>
