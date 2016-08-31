@@ -1,3 +1,5 @@
+var background = chrome.extension.getBackgroundPage();
+
 // 2. This code loads the IFrame Player API code asynchronously.
 var tag = document.createElement('script');
 
@@ -40,3 +42,14 @@ player.stopVideo();
 }
 
 
+var list = document.createElement('ul');
+
+background.queue.forEach(function(element) {
+    var listitem = document.createElement('li');
+    listitem.innerText = element.title;
+    list.appendChild(listitem);
+}, this);
+
+
+var player = document.getElementById("player");
+player.appendChild(list);
