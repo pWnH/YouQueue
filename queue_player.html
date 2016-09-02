@@ -2,28 +2,34 @@
 <html>
 <head>
     <link rel="stylesheet" href="ext/css/bootstrap.min.css">
+    <link rel="stylesheet" href="queuePlayer.css">
 </head>
   <body>
   <div class="container">
     <div class="row">
         <div class="col-sm-6 col-xs-12">
             <div class="page-header">
-                <h2>Queue Player: <small id="songname">Current song</small></h2>
+                <h2>Player:</h2>
+                <div class="current-song">
+                    <span id="songname">No Song queued</span>
+                </div>
             </div>
             <div class="row">
-                <div id="player"></div>
+                <div id="player">
+
+                </div>
+
             </div>
         </div>
         <div class="col-sm-6 col-xs-12">
             <div class="page-header">
-                <h2>Warteschlange:</h2>
+                <h2>Current Queue:</h2>
+                <div class="current-song">
+                    <span id="queue-count">0</span> Song(s) queued
+                </div>
             </div>
             <div id="queue-items">
-                <ul>
-                    <li>
-                        Song1
-                    </li>
-                </ul>
+
             </div>
         </div>
     </div>
@@ -31,6 +37,9 @@
     <!-- 1. The <iframe> (and video player) will replace this <div> tag. -->
 
 
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <script src="ext/js/jquery-3.1.0.min.js"></script>
+    <script src="ext/js/bootstrap.min.js"></script>
     <script src="player.js"></script>
   </body>
 </html>
