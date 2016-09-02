@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function () { 
+document.addEventListener('DOMContentLoaded', function () {
     if (Notification.permission !== "granted")
         Notification.requestPermission();
 });
@@ -11,7 +11,7 @@ var youtubeLinkParsing = function(url){ // gets the id of the video
     } else {
     alert("Given URL invalid: '" + url + "'")
     }
-}
+};
 
 function notifyMe(text) { //Notification with dynamic text
   if (!Notification) {
@@ -23,8 +23,8 @@ function notifyMe(text) { //Notification with dynamic text
     Notification.requestPermission();
   else {
     var notification = new Notification('YouQueue', {
-      icon: 'http://imgur.com/E7L5QMe.png',
-      body: text,
+      icon: 'https://imgur.com/E7L5QMe.png',
+      body: text
     });
 
     notification.onclick = function () {
@@ -34,27 +34,37 @@ function notifyMe(text) { //Notification with dynamic text
 }
 
 //Add to queue button variables
-var addButton;
 var btnImage;
+var videoTitle = "";
 
 function createAddButton(){ //creates the add to queue button + image
+    var addButton;
     addButton = document.createElement("BUTTON");
     addButton.setAttribute("class", "yt-uix-button yt-uix-button-size-default yt-uix-button-opacity yt-uix-button-has-icon no-icon-markup pause-resume-autoplay yt-uix-tooltip");
     addButton.setAttribute("title", "Add to queue");
 
     btnImage = document.createElement("img");
-    btnImage.setAttribute("src", "http://i.imgur.com/xzr5pVP.png");
+    btnImage.setAttribute("src", "https://i.imgur.com/xzr5pVP.png");
     btnImage.align = "right";
     btnImage.height = "32";
     btnImage.width = "28";
 
     addButton.appendChild(btnImage);
+    return addButton;
 }
 
+
 function setAddButton(){ //adds the button to the current youtube page 
-    createAddButton();   //+ adds event listener + notification
-    var headlineTitle = document.getElementById("watch8-secondary-actions");
-    headlineTitle.appendChild(addButton);
+    var addButton = createAddButton();   //+ adds event listener + notification
+    var headlineTitle = $("#watch8-secondary-actions");
+    var newHeadLine = $("div#info");
+    if(typeof headlineTitle[0] != "undefined"){
+        headlineTitle.append(addButton);
+    } else if(typeof newHeadLine[0] != "undefined"){
+        console.log("Fuck new youtube design...");
+        // Polymer.dom(newHeadLine).appendChild(addButton)
+        // newHeadLine.append(addButton);
+    }
 
     addButton.addEventListener("click", function(){
         var id = youtubeLinkParsing(window.location.href);
@@ -63,7 +73,6 @@ function setAddButton(){ //adds the button to the current youtube page
             "title": videoTitle
         };
         chrome.runtime.sendMessage(video);
-
         var notifyText = "Added "+ videoTitle +" to queue.";
         notifyMe(notifyText);
         btnImage.setAttribute("src", "http://i.imgur.com/Ptyp4I6.png");
@@ -71,9 +80,15 @@ function setAddButton(){ //adds the button to the current youtube page
     });
 }
 
-setAddButton();
+$(document).ready(function(){
+    videoTitle = document.getElementById("eow-title").getAttribute("title");
+    setAddButton();
+});
 
-var videoTitle = document.getElementById("eow-title").getAttribute("title");
+
+
+
+
 
 
 
