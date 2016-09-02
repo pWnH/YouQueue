@@ -1,9 +1,36 @@
 <!DOCTYPE html>
 <html>
+<head>
+    <link rel="stylesheet" href="ext/css/bootstrap.min.css">
+</head>
   <body>
+  <div class="container">
+    <div class="row">
+        <div class="col-sm-6 col-xs-12">
+            <div class="page-header">
+                <h2>Queue Player: <small id="songname">Current song</small></h2>
+            </div>
+            <div class="row">
+                <div id="player"></div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xs-12">
+            <div class="page-header">
+                <h2>Warteschlange:</h2>
+            </div>
+            <div id="queue-items">
+                <ul>
+                    <li>
+                        Song1
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+  </div>
     <!-- 1. The <iframe> (and video player) will replace this <div> tag. -->
-    <h1>Queue Player</h1>
-    <div id="player"></div>
+
+
     <script src="player.js"></script>
   </body>
 </html>

@@ -18,7 +18,8 @@
 	"content_scripts": [
 		{
 			"matches": ["http://www.youtube.com/*", "https://www.youtube.com/*"],
-			"js": ["content_script.js", "jquery-3.1.0.min.js", "player.js"]
+			"js": ["ext/js/jquery-3.1.0.min.js", "content_script.js"],
+			"run_at": "document_end"
 		}
 	],
 	"web_accessible_resources":["player.js"]

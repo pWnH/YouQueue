@@ -11,7 +11,7 @@ var youtubeLinkParsing = function(url){ // gets the id of the video
     } else {
     alert("Given URL invalid: '" + url + "'")
     }
-}
+};
 
 function notifyMe(text) { //Notification with dynamic text
   if (!Notification) {
@@ -24,7 +24,7 @@ function notifyMe(text) { //Notification with dynamic text
   else {
     var notification = new Notification('YouQueue', {
       icon: 'http://imgur.com/E7L5QMe.png',
-      body: text,
+      body: text
     });
 
     notification.onclick = function () {
@@ -34,10 +34,11 @@ function notifyMe(text) { //Notification with dynamic text
 }
 
 //Add to queue button variables
-var addButton;
 var btnImage;
+var videoTitle = "";
 
 function createAddButton(){ //creates the add to queue button + image
+    var addButton;
     addButton = document.createElement("BUTTON");
     addButton.setAttribute("class", "yt-uix-button yt-uix-button-size-default yt-uix-button-opacity yt-uix-button-has-icon no-icon-markup pause-resume-autoplay yt-uix-tooltip");
     addButton.setAttribute("title", "Add to queue");
@@ -49,12 +50,19 @@ function createAddButton(){ //creates the add to queue button + image
     btnImage.width = "28";
 
     addButton.appendChild(btnImage);
+    return addButton;
 }
 
 function setAddButton(){ //adds the button to the current youtube page 
-    createAddButton();   //+ adds event listener + notification
-    var headlineTitle = document.getElementById("watch8-secondary-actions");
-    headlineTitle.appendChild(addButton);
+    var addButton = createAddButton();   //+ adds event listener + notification
+    var headlineTitle = $("#watch8-secondary-actions");
+    var newHeadLine = $("div#info");
+    if(typeof headlineTitle[0] != "undefined"){
+        headlineTitle.append(addButton);
+    } else if(typeof newHeadLine[0] != "undefined"){
+        console.log("newheadlin");
+        newHeadLine.append(addButton);
+    }
 
     addButton.addEventListener("click", function(){
         var id = youtubeLinkParsing(window.location.href);
@@ -72,8 +80,15 @@ function setAddButton(){ //adds the button to the current youtube page
 }
 
 setAddButton();
+var newTitle = $("yt-formatted-string[class~='ytd-video-primary-info-renderer']").text();
 
-var videoTitle = document.getElementById("eow-title").getAttribute("title");
+if(typeof newTitle !== 'undefined'){
+    videoTitle = newTitle;
+} else {
+    videoTitle = document.getElementById("eow-title").getAttribute("title");
+}
+
+
 
 
 
