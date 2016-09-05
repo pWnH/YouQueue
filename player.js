@@ -49,6 +49,21 @@ function stopVideo() {
     player.stopVideo();
 }
 
+function afterSort(newSort){
+    var newQueue = [];
+    var oldQueue = background.queue;
+
+    newSort.forEach(function(id){
+        oldQueue.forEach(function(video) {
+            if(video.id === id)
+            {
+                newQueue.push(video);
+            }
+        }, this);
+    });
+    background.queue = newQueue;
+}
+
 /**
  * Creates a list of names from the currently added videos
  */
@@ -59,17 +74,29 @@ function updateQueueList()
         document.getElementById("queue-items").removeChild(list);
     }
     list = document.createElement('ul');
+    list.setAttribute("id","sortable")
     background.queue.forEach(function(element, index) {
         //Dont show the current song playing in the queue
         if(index != 0){
             var listitem = document.createElement('li');
             listitem.innerText = element.title;
             listitem.setAttribute('id', element.id);
+            listitem.setAttribute('class',"ui-state-default");
             list.appendChild(listitem);
         }
         $('#queue-count').text(index);
+        
     });
 
     document.getElementById("queue-items").appendChild(list);
+    $('#sortable').sortable(
+        {
+            stop: function(event, ui){
+                var data = $(this).sortable('toArray');
+                console.log(data);
+                afterSort(data);
+            }
+        }
+    );
 }
 

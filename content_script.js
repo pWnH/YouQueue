@@ -13,7 +13,7 @@ var youtubeLinkParsing = function(url){ // gets the id of the video
     }
 };
 
-function notifyMe(text) { //Notification with dynamic text
+function notifyMe(text, imagelink) { //Notification with dynamic text
   if (!Notification) {
     alert('Desktop notifications not available in your browser. Try Chromium.'); 
     return;
@@ -23,7 +23,7 @@ function notifyMe(text) { //Notification with dynamic text
     Notification.requestPermission();
   else {
     var notification = new Notification('YouQueue', {
-      icon: 'https://imgur.com/E7L5QMe.png',
+      icon: imagelink,
       body: text
     });
 
@@ -74,7 +74,8 @@ function setAddButton(){ //adds the button to the current youtube page
         };
         chrome.runtime.sendMessage(video);
         var notifyText = "Added "+ videoTitle +" to queue.";
-        notifyMe(notifyText);
+        var thumbnail = document.getElementById('watch7-content').children[10].href;
+        notifyMe(notifyText, thumbnail);
         btnImage.setAttribute("src", "http://i.imgur.com/Ptyp4I6.png");
         addButton.disabled=true; //"prevents" duplicate added videos
     });
