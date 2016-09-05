@@ -27,7 +27,6 @@ function onYouTubeIframeAPIReady() {
 // 4. The API will call this function when the video player is ready.
 function onPlayerReady(event) {
     event.target.playVideo();
-    background.queue.shift();
     updateQueueList();
 }
 
@@ -37,12 +36,11 @@ function onPlayerReady(event) {
 var done = false;
 function onPlayerStateChange(event) {
     if (event.data == 0) {
-        var vidId = background.queue[0];
+        var vidId = background.queue.shift();
         console.log(background.queue);
         if(typeof vidId != "undefined"){
             player.loadVideoById(vidId.id);
             $('#songname').text(vidId.title);
-            background.queue.shift();
             updateQueueList();
         }
     }
@@ -71,8 +69,6 @@ function updateQueueList()
         }
         $('#queue-count').text(index);
     });
-
-
 
     document.getElementById("queue-items").appendChild(list);
 }
