@@ -7,3 +7,7 @@
     overflow: hidden;
     font-size: 150%;
 }
+
+.list-group-item{
+    cursor: pointer;
+}

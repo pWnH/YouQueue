@@ -89,6 +89,7 @@ function updateQueueList()
     }
     list = document.createElement('ul');
     list.setAttribute("id","sortable");
+    list.setAttribute("class","list-group");
     $('#queue-count').text(0);
     background.queue.forEach(function(element, index) {
         //Dont show the current song playing in the queue
@@ -96,7 +97,7 @@ function updateQueueList()
             var listitem = document.createElement('li');
             listitem.innerText = element.title;
             listitem.setAttribute('id', element.id);
-            listitem.setAttribute('class',"ui-state-default");
+            listitem.setAttribute('class',"ui-state-default list-group-item");
             list.appendChild(listitem);
         // }
         $('#queue-count').text(index+1);
