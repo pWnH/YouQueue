@@ -7,20 +7,54 @@ if(typeof currentVideo == 'undefined' && typeof queue[0] != 'undefined'){
     currentVideo = queue.shift();
 }
 var playerTab;
+var contextTitle = '';
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse){
     if(request.id){
-        if(typeof currentVideo == 'undefined'){
-            currentVideo = request;
-            chrome.storage.sync.set({'currentVideo': request}, function() {});
-        } else {
-            queue.push(request); //adds the video element (see content_script.js => ln 65)
-            chrome.storage.sync.set({'playQueue': queue}, function() {});
-        }
+        addSongToQueue(request);
 
         if(playerTab){
             chrome.tabs.sendMessage(playerTab, {}, function(response) {}); //Trigger for updating the current queue
         }
+    } else if(request.contextVidTitle){
+        contextTitle = request.contextVidTitle;
     } else {
         playerTab = sender.tab.id;
     }
+});
+
+function addSongToQueue(video)
+{
+    if(typeof currentVideo == 'undefined'){
+        currentVideo = video;
+        chrome.storage.sync.set({'currentVideo': video}, function() {});
+    } else {
+        queue.push(video); //adds the video element (see content_script.js => ln 65)
+        chrome.storage.sync.set({'playQueue': queue}, function() {});
+    }
+}
+
+function youtubeLinkParsing (url){ // gets the id of the video
+    var regExp = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    var match = url.match(regExp);
+    if (match && match[2].length == 11) {
+        return match[2];
+    } else {
+        alert("Given URL invalid: '" + url + "'");
+        return false;
+    }
+}
+
+var contextHandler = function(e) {
+    var url = e.linkUrl;
+    var videoId = youtubeLinkParsing(url);
+    console.log(e);
+    if(videoId !== false){
+        addSongToQueue({id: videoId, title: contextTitle});
+    }
+};
+
+chrome.contextMenus.create({
+    "title": "Add to YouQueue",
+    "contexts": ["link"],
+    "onclick" : contextHandler
 });

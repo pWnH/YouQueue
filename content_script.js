@@ -72,22 +72,25 @@ function setAddButton(){ //adds the button to the current youtube page
     }
 
     addButton.addEventListener("click", function(){
-        var id = youtubeLinkParsing(window.location.href);
-        var video = {
-            "id": id,
-            "title": videoTitle
-        };
-        chrome.runtime.sendMessage(video);
-        var notifyText = "Added "+ videoTitle +" to queue.";
-        var thumbnail = document.getElementById('watch7-content').children[10].href;
-        notifyMe(notifyText, thumbnail);
+        addToQueue(window.location.href);
         btnImage.setAttribute("src", "http://i.imgur.com/Ptyp4I6.png");
         addButton.disabled=true; //"prevents" duplicate added videos
     });
 }
 
+function addToQueue(url) {
+    var id = youtubeLinkParsing(url);
+    var video = {
+        "id": id,
+        "title": videoTitle
+    };
+    chrome.runtime.sendMessage(video);
+    var notifyText = "Added "+ videoTitle +" to queue.";
+    var thumbnail = document.getElementById('watch7-content').children[10].href;
+    notifyMe(notifyText, thumbnail);
+}
+
 function afterNavigate() {
-    console.log('afterNavigate');
     if ('/watch' === location.pathname) {
         videoTitle = document.getElementById("eow-title").getAttribute("title");
         setAddButton();
@@ -100,12 +103,24 @@ function afterNavigate() {
         }
     }, true);
 // After page load
+
 afterNavigate();
 
+$(document).mousedown(function(e) {
+    if (e.button == 2) {
+        var title = $(e.target).attr('title');
 
+        if(typeof title == 'undefined'){
+            var link = $(e.target).closest('.yt-lockup-dismissable').find('.yt-lockup-title').children('a');
+            if(typeof link != 'undefined'){
+                title = link.attr('title');
+            }
+        }
 
-
-
+        chrome.runtime.sendMessage({contextVidTitle: title});
+    }
+    return true;
+});
 
 
 
