@@ -6,7 +6,7 @@ var currentVideo = chrome.storage.sync.get('currentVideo', function() {}); //arr
 
 if(!currentVideo && typeof queue[0] != 'undefined'){
     currentVideo = queue.shift();
-    
+
 }
 
 var playerTab;
@@ -21,12 +21,3 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse){
         playerTab = sender.tab.id;
     }
 });
-
-// chrome.runtime.onMessage.addListener(
-//     function(request, sender, sendResponse) {
-//         console.log(sender.tab ?
-//         "from a content script:" + sender.tab.url :
-//             "from the extension");
-//         if (request.greeting == "hello")
-//             sendResponse({farewell: "goodbye"});
-//     });

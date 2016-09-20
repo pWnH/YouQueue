@@ -42,6 +42,7 @@ function createAddButton(){ //creates the add to queue button + image
     addButton = document.createElement("BUTTON");
     addButton.setAttribute("class", "yt-uix-button yt-uix-button-size-default yt-uix-button-opacity yt-uix-button-has-icon no-icon-markup pause-resume-autoplay yt-uix-tooltip");
     addButton.setAttribute("title", "Add to queue");
+    addButton.setAttribute("id", "Youqueue-Add");
 
     btnImage = document.createElement("img");
     btnImage.setAttribute("src", "https://i.imgur.com/xzr5pVP.png");
@@ -54,8 +55,12 @@ function createAddButton(){ //creates the add to queue button + image
 }
 
 
-function setAddButton(){ //adds the button to the current youtube page 
-    var addButton = createAddButton();   //+ adds event listener + notification
+function setAddButton(){ //adds the button to the current youtube page
+    var addButton = document.getElementById('Youqueue-Add');
+    if(!addButton){
+        addButton = createAddButton();   //+ adds event listener + notification
+    }
+
     var headlineTitle = $("#watch8-secondary-actions");
     var newHeadLine = $("div#info");
     if(typeof headlineTitle[0] != "undefined"){
@@ -81,10 +86,21 @@ function setAddButton(){ //adds the button to the current youtube page
     });
 }
 
-$(document).ready(function(){
-    videoTitle = document.getElementById("eow-title").getAttribute("title");
-    setAddButton();
-});
+function afterNavigate() {
+    console.log('afterNavigate');
+    if ('/watch' === location.pathname) {
+        videoTitle = document.getElementById("eow-title").getAttribute("title");
+        setAddButton();
+    }
+}
+(document.body || document.documentElement).addEventListener('transitionend',
+    function(/*TransitionEvent*/ event) {
+        if (event.propertyName === 'width' && event.target.id === 'progress') {
+            afterNavigate();
+        }
+    }, true);
+// After page load
+afterNavigate();
 
 
 
