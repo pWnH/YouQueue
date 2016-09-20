@@ -1,12 +1,22 @@
 var background = chrome.extension.getBackgroundPage(); //allows communication with background page
 var list;
+
+chrome.runtime.sendMessage({}, function() {}); //Send Message to get tabId in Backgroundscript
+
+chrome.runtime.onMessage.addListener(
+    function(request, sender, sendResponse) {
+        updateQueueList();
+    }
+);
+
+
 // 3. This function creates an <iframe> (and YouTube player)
 //    after the API code downloads.
 var player;
 function onYouTubeIframeAPIReady() {
-    var video = background.queue[0];
+    var video = background.currentVideo;
     var videoId = "hLpfwI3SFNk";
-    if(typeof video != "undefined"){
+    if(typeof video != "undefined" && video !== false){
         videoId = video.id;
         $('#songname').text(video.title);
     }
@@ -37,11 +47,15 @@ var done = false;
 function onPlayerStateChange(event) {
     if (event.data == 0) {
         var vidId = background.queue.shift();
-        console.log(background.queue);
         if(typeof vidId != "undefined"){
+            background.currentVideo = vidId;
+            chrome.storage.sync.set({'currentVideo': vidId}, function() {});
             player.loadVideoById(vidId.id);
             $('#songname').text(vidId.title);
             updateQueueList();
+        } else {
+            background.currentVideo = false;
+            chrome.storage.sync.set({'currentVideo': false}, function() {});
         }
     }
 }
@@ -52,7 +66,6 @@ function stopVideo() {
 function afterSort(newSort){
     var newQueue = [];
     var oldQueue = background.queue;
-
     newSort.forEach(function(id){
         oldQueue.forEach(function(video) {
             if(video.id === id)
@@ -62,6 +75,7 @@ function afterSort(newSort){
         }, this);
     });
     background.queue = newQueue;
+    chrome.storage.sync.set({'playQueue': background.queue}, function() {});
 }
 
 /**
@@ -69,22 +83,23 @@ function afterSort(newSort){
  */
 function updateQueueList()
 {
-
+    chrome.storage.sync.set({'playQueue': background.queue}, function() {});
     if(typeof list != "undefined"){
         document.getElementById("queue-items").removeChild(list);
     }
     list = document.createElement('ul');
-    list.setAttribute("id","sortable")
+    list.setAttribute("id","sortable");
+    $('#queue-count').text(0);
     background.queue.forEach(function(element, index) {
         //Dont show the current song playing in the queue
-        if(index != 0){
+        // if(index != 0){
             var listitem = document.createElement('li');
             listitem.innerText = element.title;
             listitem.setAttribute('id', element.id);
             listitem.setAttribute('class',"ui-state-default");
             list.appendChild(listitem);
-        }
-        $('#queue-count').text(index);
+        // }
+        $('#queue-count').text(index+1);
         
     });
 
@@ -93,10 +108,12 @@ function updateQueueList()
         {
             stop: function(event, ui){
                 var data = $(this).sortable('toArray');
-                console.log(data);
                 afterSort(data);
             }
         }
     );
 }
 
+$( "#skipSong" ).click(function() {
+    onPlayerStateChange({data: 0});
+});
