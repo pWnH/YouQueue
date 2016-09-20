@@ -57,7 +57,7 @@ function createAddButton(){ //creates the add to queue button + image
 
 function setAddButton(){ //adds the button to the current youtube page
     var addButton = document.getElementById('Youqueue-Add');
-    if(!addButton){
+    if(addButton == null){
         addButton = createAddButton();   //+ adds event listener + notification
     }
 

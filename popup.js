@@ -8,6 +8,11 @@ btn.addEventListener("click",function () {
 //sets a text in the popup which shows the current count of videos in queue
 var text = document.createElement('p');
 text.id = "queue-text-p";
-text.textContent = background.queue.length;
+var queueCount = background.queue.length;
+console.log(background.currentVideo);
+if(typeof background.currentVideo != 'undefined'){
+    queueCount++;
+}
+text.textContent = queueCount;
 
 document.getElementById('queue-text').appendChild(text);
