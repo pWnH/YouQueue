@@ -28,7 +28,7 @@ function notifyMe(text, imagelink) { //Notification with dynamic text
     });
 
     notification.onclick = function () {
-      window.open("chrome-extension://gdadllnmdbbggaoimbjckpadnhheladk/queue_player.html");      
+        window.open('queue_player.html')   ;
     };
   }
 }
