@@ -8,6 +8,7 @@ if(typeof currentVideo == 'undefined' && typeof queue[0] != 'undefined'){
 }
 var playerTab;
 var contextTitle = '';
+var contextImg = '';
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse){
     if(request.id){
         addSongToQueue(request);
@@ -17,6 +18,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse){
         }
     } else if(request.contextVidTitle){
         contextTitle = request.contextVidTitle;
+        contextImg = request.contextImg;
     } else {
         playerTab = sender.tab.id;
     }
@@ -47,11 +49,24 @@ function youtubeLinkParsing (url){ // gets the id of the video
 var contextHandler = function(e) {
     var url = e.linkUrl;
     var videoId = youtubeLinkParsing(url);
-    console.log(e);
+
     if(videoId !== false){
         addSongToQueue({id: videoId, title: contextTitle});
+        var notifyText = "Added "+ contextTitle +" to queue.";
+        notifyBackground(notifyText, contextImg);
     }
 };
+
+function notifyBackground(text, imagelink) { //Notification with dynamic text
+    var notification = new Notification('YouQueue', {
+        icon: imagelink,
+        body: text
+    });
+
+    notification.onclick = function () {
+        window.open("chrome-extension://gdadllnmdbbggaoimbjckpadnhheladk/queue_player.html");
+    };
+}
 
 chrome.contextMenus.create({
     "title": "Add to YouQueue",

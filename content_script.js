@@ -109,15 +109,26 @@ afterNavigate();
 $(document).mousedown(function(e) {
     if (e.button == 2) {
         var title = $(e.target).attr('title');
-
-        if(typeof title == 'undefined'){
+        var imgLink = '';
+        if(typeof title == 'undefined'){    // User clicked on the image instead of the link (which has no title attribute)
             var link = $(e.target).closest('.yt-lockup-dismissable').find('.yt-lockup-title').children('a');
-            if(typeof link != 'undefined'){
+            imgLink = $(e.target).attr('src');
+            if(typeof link.attr('title') != 'undefined'){
                 title = link.attr('title');
+            } else {    // User clicked on the image of the recommended list
+                link = $(e.target).closest('.video-list-item').find('.content-wrapper').children('a');
+                if(typeof link != 'undefined') {
+                    title = link.attr('title');
+                }
             }
         }
-
-        chrome.runtime.sendMessage({contextVidTitle: title});
+        if(typeof imgLink == 'undefined'){
+            imgLink = $(e.target).closest('.yt-lockup-dismissable').find('.yt-thumb-simple').children('img').attr('src');
+            if(typeof imgLink == 'undefined'){
+                imgLink = $(e.target).closest('.video-list-item').find('.yt-uix-simple-thumb-wrap').children('img').attr('src');
+            }
+        }
+        chrome.runtime.sendMessage({contextVidTitle: title, contextImg: imgLink});
     }
     return true;
 });
