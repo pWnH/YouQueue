@@ -11,3 +11,12 @@
 .list-group-item{
     cursor: pointer;
 }
+
+.queueTitle{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    float: left;
+    width: 70%;
+    white-space: nowrap;
+    margin-right: 5%;
+}

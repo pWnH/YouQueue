@@ -30,6 +30,8 @@ function addSongToQueue(video)
         currentVideo = video;
         chrome.storage.sync.set({'currentVideo': video}, function() {});
     } else {
+        var currentdate = new Date();
+        video.added = currentdate.timeNow();
         queue.push(video); //adds the video element (see content_script.js => ln 65)
         chrome.storage.sync.set({'playQueue': queue}, function() {});
     }
@@ -54,6 +56,9 @@ var contextHandler = function(e) {
         addSongToQueue({id: videoId, title: contextTitle});
         var notifyText = "Added "+ contextTitle +" to queue.";
         notifyBackground(notifyText, contextImg);
+        if(playerTab){
+            chrome.tabs.sendMessage(playerTab, {}, function(response) {}); //Trigger for updating the current queue
+        }
     }
 };
 
@@ -73,3 +78,7 @@ chrome.contextMenus.create({
     "contexts": ["link"],
     "onclick" : contextHandler
 });
+
+Date.prototype.timeNow = function () {
+    return ((this.getHours() < 10)?"0":"") + this.getHours() +":"+ ((this.getMinutes() < 10)?"0":"") + this.getMinutes() +":"+ ((this.getSeconds() < 10)?"0":"") + this.getSeconds();
+};

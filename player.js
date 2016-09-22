@@ -94,14 +94,15 @@ function updateQueueList()
     list.setAttribute("class","list-group");
     $('#queue-count').text(0);
     background.queue.forEach(function(element, index) {
-        //Dont show the current song playing in the queue
-        // if(index != 0){
-            var listitem = document.createElement('li');
-            listitem.innerText = element.title;
-            listitem.setAttribute('id', element.id);
-            listitem.setAttribute('class',"ui-state-default list-group-item");
-            list.appendChild(listitem);
-        // }
+        var listitem = document.createElement('li');
+        listitem.innerHTML = "<button id='del-"+element.id+"' class='btn btn-default'>" +
+                                "<span class='glyphicon glyphicon-trash' aria-hidden='true'></span>" +
+                             "</button>" +
+                             "<span class='queueTitle'>"+element.title+"</span>" +
+                             "<span class='pull-right'>("+element.added+")</span>";
+        listitem.setAttribute('id', element.id);
+        listitem.setAttribute('class',"ui-state-default list-group-item");
+        list.appendChild(listitem);
         $('#queue-count').text(index+1);
         
     });
@@ -119,4 +120,17 @@ function updateQueueList()
 
 $( "#skipSong" ).click(function() {
     onPlayerStateChange({data: 0});
+});
+
+$(document).on('click', '[id^=del-]', function() {
+    var videoId = $(this).attr('id').replace('del-', '');
+    var removed = false;
+    //Only removes the first item with the matching video id right now
+    background.queue.forEach(function(element, index) {
+        if(element.id == videoId && !removed){
+            background.queue.splice(index, 1);
+            updateQueueList();
+            removed = true;
+        }
+    });
 });
