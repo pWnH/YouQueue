@@ -67,9 +67,11 @@ function afterSort(newSort){
     var newQueue = [];
     var oldQueue = background.queue;
     newSort.forEach(function(id){
+        var found = false;
         oldQueue.forEach(function(video) {
-            if(video.id === id)
+            if(video.id === id && !found)
             {
+                found = true;
                 newQueue.push(video);
             }
         }, this);
